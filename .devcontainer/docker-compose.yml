@@ -1,0 +1,41 @@
+# docker-compose.yml
+version: '3.8'
+
+services:
+  # Servicio para tu aplicación Go (contenedor de desarrollo principal)
+  app:
+    build:
+      context: . # El contexto es la carpeta actual (donde está tu Dockerfile, si lo tuvieras)
+      dockerfile: ./Dockerfile.dev # Opcional: puedes definir un Dockerfile para tu app Go
+    # Si no usas Dockerfile para la app, puedes montar el código directamente:
+    volumes:
+      - .:/app # Monta tu código fuente en el contenedor
+    working_dir: /app
+    ports:
+      - "3000:3000" # Mapea el puerto de tu app Fiber
+    environment:
+      # Asegúrate de que tu aplicación Go pueda conectarse al servicio 'db'
+      DATABASE_URL: "postgres://myuser:mypassword@db:5432/mydatabase" 
+    depends_on:
+      db:
+        condition: service_healthy # Espera a que la base de datos esté lista
+
+  # Servicio de PostgreSQL
+  db:
+    image: postgres:15-alpine # Imagen de PostgreSQL
+    ports:
+      - "5432:5432" # Mapea el puerto de PostgreSQL
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: mydatabase
+    volumes:
+      - db_data:/var/lib/postgresql/data # Volumen para persistencia de datos
+    healthcheck: # Healthcheck para asegurar que la DB esté lista antes que la app
+      test: ["CMD-SHELL", "pg_isready -U $POSTGRES_USER -d $POSTGRES_DB"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  db_data: # Define el volumen nombrado para la persistencia de la base de datos

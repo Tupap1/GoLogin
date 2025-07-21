@@ -15,10 +15,12 @@ services:
       - "3000:3000" # Mapea el puerto de tu app Fiber
     environment:
       # Asegúrate de que tu aplicación Go pueda conectarse al servicio 'db'
-      DATABASE_URL: "postgres://myuser:mypassword@db:5432/mydatabase" 
+      DATABASE_URL: "postgresql://postgres:[@Ndres137]@db.pwrlfwrdsfoslavbyvde.supabase.co:5432/postgres" 
     depends_on:
       db:
         condition: service_healthy # Espera a que la base de datos esté lista
+
+
 
   # Servicio de PostgreSQL
   db:

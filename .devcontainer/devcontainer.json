@@ -1,38 +1,22 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/go
 {
-  "name": "Go & PostgreSQL",
-  // Utiliza una imagen base de Dev Container para Go
-  
-  
-  // Agrega la característica de Docker-in-Docker para poder ejecutar servicios Docker dentro del Codespace
-  "features": {
-    "ghcr.io/devcontainers/features/docker-in-docker:2": {
-      "version": "latest" // Asegura la última versión de la característica Docker-in-Docker
-    }
-  },
+	"name": "Go",
+	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+	"image": "mcr.microsoft.com/devcontainers/go:1-1.24-bookworm"
 
-  // Define los servicios de Docker Compose que se ejecutarán junto a tu contenedor de desarrollo principal.
-  // IMPORTANTE: Estos servicios se configuran a través de Docker Compose dentro del Codespace.
-  "dockerComposeFile": "docker-compose.yml", // Apunta a un archivo docker-compose.yml
-  "service": "app", // Especifica cuál de los servicios en docker-compose.yml es tu contenedor de desarrollo principal (tu app Go)
-  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}", // Directorio de trabajo
+	// Features to add to the dev container. More info: https://containers.dev/features.
+	// "features": {},
 
-  // Reenvía puertos para acceder a tu app Go y a PostgreSQL desde tu máquina local
-  "forwardPorts": [3000, 5432], 
-  
-  // Extensiones de VS Code útiles para Go
-  "customizations": {
-    "vscode": {
-      "extensions": [
-        "golang.go",
-        "ms-azuretools.vscode-docker", // Útil para gestionar Docker dentro de VS Code
-        "EditorConfig.EditorConfig"
-      ]
-    }
-  },
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// "forwardPorts": [],
 
-  // Comandos para ejecutar una vez que el Codespace esté listo
-  "postCreateCommand": "go mod tidy && go mod download",
-  
-  // Opcional: Configuración para que el usuario sea el propietario de los archivos
-  "remoteUser": "root" // Esto puede ayudar con permisos si encuentras problemas al ejecutar comandos Docker
+	// Use 'postCreateCommand' to run commands after the container is created.
+	// "postCreateCommand": "go version",
+
+	// Configure tool-specific properties.
+	// "customizations": {},
+
+	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+	// "remoteUser": "root"
 }

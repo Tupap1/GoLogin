@@ -45,7 +45,7 @@ func main(){
 
 
 	app.Put("/api/todos/:id", func (c *fiber.Ctx) error {
-		id :=	c.Params("id")
+		id := c.Params("id")
 
 		for i, todo := range todos {
 			if fmt.Sprint(todo.ID) == id {
@@ -53,7 +53,8 @@ func main(){
 				return c.Status(200).JSON(todos[i])
 			}
 		}
-		c.Status(401).JSON(fiber.Map )
+
+		return c.Status(401).JSON(fiber.Map{"body": "Item not found"})
 	})
 
 	log.Fatal(app.Listen(":4000"))

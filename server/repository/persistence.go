@@ -3,20 +3,35 @@ package repository
 
 import (
 	"log"
-	"os"
-	"gorm.io/driver/sqlite"
+	"time"
+	//"os"
 	"gorm.io/gorm"
 	"github.com/tupap1/gologin/server/models"
+	"gorm.io/driver/postgres"
+
 )
 
-func initDatabase() (*gorm.DB, error) {
-	os.Remove("test.db")
-	db, err := gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
+func InitDatabase() (*gorm.DB, error) {
+	dsn := "host=aws-0-sa-east-1.pooler.supabase.com user=postgres.pwrlfwrdsfoslavbyvde password=@Ndres137 dbname=postgres port=6543 sslmode=disable TimeZone=Asia/Shanghai"
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
-		return nil, err
+		log.Fatalf("failed to connect database: %v", err)
+	}
+
+	sqlDB, err := db.DB()
+	if err != nil {
+		log.Fatalf("failed to get sqlDB from gorm: %v", err)
 	}
 	
-	err = db.AutoMigrate(&models.User{})
+
+	sqlDB.SetMaxIdleConns(10) // Conexiones inactivas
+	sqlDB.SetMaxOpenConns(100) // Máximo de conexiones abiertas
+	sqlDB.SetConnMaxLifetime(time.Hour) // Tiempo de vida de la conexión
+
+	log.Println("Successfully connected to the database!")
+
+
+	err = db.AutoMigrate(&models.RefreshToken{})
 	if err != nil {
 		return nil, err
 	}

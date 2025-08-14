@@ -4,6 +4,11 @@ import (
 	"fmt"
 	"log"
 	"github.com/gofiber/fiber/v2"
+	"context"
+ 	//"gorm.io/driver/sqlite"
+ 	//"gorm.io/gorm"
+	"os"
+	"github.com/jackc/pgx/v5"
 )
 
 
@@ -58,4 +63,25 @@ func main(){
 	})
 
 	log.Fatal(app.Listen(":4000"))
+
+
+	fmt.Println(os.Getenv("DATABASE_URL"))
+
+	
+	conn, err := pgx.Connect(context.Background(), os.Getenv("DATABASE_URL"))
+	if err != nil {
+		log.Fatalf("Failed to connect to the database: %v", err)
+	}
+	defer conn.Close(context.Background())
+
+	// Example query to test connection
+	var version string
+	if err := conn.QueryRow(context.Background(), "SELECT version()").Scan(&version); err != nil {
+		log.Fatalf("Query failed: %v", err)
+	}
+
+	log.Println("Connected to:", version)
 }
+
+
+

@@ -3,23 +3,59 @@ package main
 import (
 	"fmt"
 	"log"
+	"time"
 	"github.com/gofiber/fiber/v2"
-	"context"
- 	//"gorm.io/driver/sqlite"
- 	//"gorm.io/gorm"
-	"os"
-	"github.com/jackc/pgx/v5"
+	"gorm.io/driver/postgres"
+ 	"gorm.io/gorm"
+
 )
 
 
 
-type Todo struct {
-	ID int	`json:"id"`
-	Completed bool `json:"completed"`
-	Body string `json:"body"`
-}
-
 func main(){
+	dsn := "host=aws-0-sa-east-1.pooler.supabase.com user=postgres.pwrlfwrdsfoslavbyvde password=@Ndres137 dbname=postgres port=6543 sslmode=disable TimeZone=Asia/Shanghai"
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	if err != nil {
+		log.Fatalf("failed to connect database: %v", err)
+	}
+
+
+	sqlDB, err := db.DB()
+	if err != nil {
+		log.Fatalf("failed to get sqlDB from gorm: %v", err)
+	}
+
+	// Configuración del pool de conexiones
+	sqlDB.SetMaxIdleConns(10) // Conexiones inactivas
+	sqlDB.SetMaxOpenConns(100) // Máximo de conexiones abiertas
+	sqlDB.SetConnMaxLifetime(time.Hour) // Tiempo de vida de la conexión
+
+	log.Println("Successfully connected to the database!")
+
+
+	err = db.AutoMigrate(&Test{})
+	if err != nil {
+		log.Fatalf("fallo al migrar la base de datos: %v", err)
+	}
+	fmt.Println("Migración de la tabla 'users' completada.") 
+
+	// 2. Crear un nuevo usuario (CREATE)
+	newUser := Test{Name: "Juan Perez", Email: "juan.perez@example.com"}
+	result := db.Create(&newUser)
+	if result.Error != nil {
+		log.Fatalf("fallo al crear usuario: %v", result.Error)
+	}
+	fmt.Printf("Usuario creado con ID: %d\n", newUser.ID)
+
+	// 3. Consultar todos los usuarios (READ)
+	var users []Test
+	db.Find(&users)
+	fmt.Println("\n--- Todos los usuarios ---")
+	for _, user := range users {
+		fmt.Printf("ID: %d, Nombre: %s, Email: %s\n", user.ID, user.Name, user.Email)
+	}
+
+
 	fmt.Println("APP IS RUNNING...")
 	app := fiber.New()
 	
@@ -65,22 +101,10 @@ func main(){
 	log.Fatal(app.Listen(":4000"))
 
 
-	fmt.Println(os.Getenv("DATABASE_URL"))
-
 	
-	conn, err := pgx.Connect(context.Background(), os.Getenv("DATABASE_URL"))
-	if err != nil {
-		log.Fatalf("Failed to connect to the database: %v", err)
-	}
-	defer conn.Close(context.Background())
 
-	// Example query to test connection
-	var version string
-	if err := conn.QueryRow(context.Background(), "SELECT version()").Scan(&version); err != nil {
-		log.Fatalf("Query failed: %v", err)
-	}
 
-	log.Println("Connected to:", version)
+
 }
 
 

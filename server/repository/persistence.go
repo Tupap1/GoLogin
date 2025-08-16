@@ -31,7 +31,7 @@ func InitDatabase() (*gorm.DB, error) {
 	log.Println("Successfully connected to the database!")
 
 
-	err = db.AutoMigrate(&models.RefreshToken{})
+	err = db.AutoMigrate(&models.Products{})
 	if err != nil {
 		return nil, err
 	}

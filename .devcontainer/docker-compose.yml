@@ -1,11 +1,10 @@
-version: "3.9"  
 services:
     client:
-        image: node:24-alpine3.21
+        build: ../Client
         ports:
             - "3000:3000"
     server:
-        image: golang:trixie
+        build: ../
         ports:
             - "8080:8080"
         environment:

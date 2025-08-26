@@ -25,8 +25,8 @@ func main() {
 	// 4. Inicia el servidor.
 	//log.Fatal(app.Listen(":8080"))
 
-	app.Get("/hola", func(c *fiber.Ctx) error {
-		return c.SendString("Hello, World!sss")
+	app.Get("/daddy", func(c *fiber.Ctx) error {
+		return c.SendString("Hello, World!")
 	})
 
 	app.Listen(":8080")

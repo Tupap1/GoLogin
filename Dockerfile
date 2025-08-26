@@ -9,13 +9,11 @@ COPY go.* ./
 # Download Go modules
 RUN go mod download
 
-COPY . .
-RUN go install github.com/air-verse/air@latest
-RUN air init
-#RUN air -c .air.toml
-
-
 # Copy the source code into the container
+COPY . .
+
+# Install Air for live reloading
+RUN go install github.com/air-verse/air@latest
 
 # Build the Go application
 RUN go build -o main main.go

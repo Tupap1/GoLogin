@@ -1,0 +1,22 @@
+FROM node:24
+
+# Establece el directorio de trabajo dentro del contenedor.
+WORKDIR /app
+
+# Copia los archivos de manifiesto de paquetes.
+COPY package.json package-lock.json* ./
+
+# Instala todas las dependencias. Usa 'npm install' para más flexibilidad en desarrollo.
+RUN npm install
+
+# Copia el resto del código fuente a la imagen.
+# Esto se hace para que Docker tenga una copia inicial del código,
+# pero los volúmenes en docker-compose se encargarán de sincronizar los cambios.
+COPY . .
+
+# Expone el puerto por defecto de Next.js para desarrollo.
+EXPOSE 3000
+
+# Comando para iniciar la aplicación en modo de desarrollo.
+# Usa 'npm run dev' para activar el hot-reloading.
+CMD ["npm", "run", "dev"]

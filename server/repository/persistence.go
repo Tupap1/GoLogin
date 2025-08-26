@@ -7,13 +7,13 @@ import (
 	//"os"
 	"gorm.io/gorm"
 	"github.com/tupap1/gologin/server/models"
-	"gorm.io/driver/postgres"
+	"gorm.io/driver/mysql"
 
 )
-
+dbpass := os.Getenv("STRING_DATABASE")
 func InitDatabase() (*gorm.DB, error) {
-	dsn := "host=aws-0-sa-east-1.pooler.supabase.com user=postgres.pwrlfwrdsfoslavbyvde password=@Ndres137 dbname=postgres port=6543 sslmode=disable TimeZone=Asia/Shanghai"
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	dsn := os.Getenv("STRING_DATABASE")
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Fatalf("failed to connect database: %v", err)
 	}

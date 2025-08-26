@@ -25,7 +25,7 @@ require (
 	golang.org/x/sync v0.16.0 // indirect
 	golang.org/x/sys v0.32.0 // indirect
 	golang.org/x/text v0.28.0 // indirect
-	gorm.io/driver/postgres v1.6.0 // indirect
+	gorm.io/driver/mysql v1.2.3 // indirect
 	gorm.io/driver/sqlite v1.6.0 // indirect
 	gorm.io/gorm v1.30.1 // indirect
 )

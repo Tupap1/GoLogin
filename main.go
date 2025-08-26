@@ -2,12 +2,12 @@ package main
 
 import (
 	"fmt"
-	"log"
+	//"log"
 	"github.com/gofiber/fiber/v2"
-	//"github.com/tupap1/gologin/server/repository"
+	//
+	// "github.com/tupap1/gologin/server/repository"
 
 )
-
 
 
 func main() {
@@ -19,13 +19,13 @@ func main() {
 
 
 	app.Get("/daddy", func(c *fiber.Ctx) error {
-		repository.InitDatabase()
+		//epository.InitDatabase()
 		return c.SendString("base de datos inicializada")
 
 })
 
 
-	app.Get("/db", func(c *fiber.Ctx) error {
+	/* app.Get("/db", func(c *fiber.Ctx) error {
 
 		var tablenames []TableName
 		result := db.Raw("SHOW TABLES").Scan(&tablenames)
@@ -40,8 +40,8 @@ func main() {
 		}
 
 		// Devolver la lista de nombres de tablas como un JSON.
-		return c.JSON(names)
-})
+		return c.JSON(names) */
+//})
 
 
 	app.Get("/", func(c *fiber.Ctx) error {

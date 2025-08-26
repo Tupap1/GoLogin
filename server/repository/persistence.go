@@ -4,13 +4,12 @@ package repository
 import (
 	"log"
 	"time"
-	//"os"
+	"os"
 	"gorm.io/gorm"
 	"github.com/tupap1/gologin/server/models"
 	"gorm.io/driver/mysql"
 
 )
-dbpass := os.Getenv("STRING_DATABASE")
 func InitDatabase() (*gorm.DB, error) {
 	dsn := os.Getenv("STRING_DATABASE")
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
@@ -21,7 +20,7 @@ func InitDatabase() (*gorm.DB, error) {
 	sqlDB, err := db.DB()
 	if err != nil {
 		log.Fatalf("failed to get sqlDB from gorm: %v", err)
-	}
+	} 
 	
 
 	sqlDB.SetMaxIdleConns(10) // Conexiones inactivas
@@ -38,3 +37,4 @@ func InitDatabase() (*gorm.DB, error) {
 	log.Println("Migración de todas las tablas completada.")
 	return db, nil
 }
+ 
